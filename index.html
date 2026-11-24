@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f5">
+  <meta name="description" content="Cerita proses dan hasil sebuah proyek upcycle sederhana.">
+  <title>Can Upcycle — Process &amp; Showcase</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f7f5;
+      --ink: #141414;
+      --muted: #777872;
+      --line: rgba(20, 20, 20, .09);
+      --sage: #3a5a40;
+      --sage-soft: #e8ede7;
+      --card: #fff;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --sans: Inter, "Avenir Next", Avenir, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, a { font: inherit; }
+    button { color: inherit; }
+
+    .shell {
+      width: min(1120px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: -.025em;
+      text-decoration: none;
+    }
+
+    .mark {
+      display: grid;
+      width: 27px;
+      height: 27px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--sage);
+      font-size: 15px;
+    }
+
+    .top-note, .eyebrow, .index, .duration, .time-readout {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: .035em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .top-note { color: var(--muted); }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 40px;
+      align-items: end;
+      padding: 82px 0 42px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 20px;
+      color: var(--sage);
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 20px;
+      height: 1px;
+      background: currentColor;
+      content: "";
+    }
+
+    h1 {
+      max-width: 700px;
+      margin: 0;
+      font-size: clamp(42px, 6.3vw, 76px);
+      font-weight: 520;
+      letter-spacing: -.075em;
+      line-height: .98;
+    }
+
+    h1 span {
+      color: #777872;
+      font-weight: 400;
+    }
+
+    .intro-aside {
+      padding-bottom: 5px;
+    }
+
+    .intro-aside p {
+      margin: 0 0 23px;
+      color: #63645e;
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .jump-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .jump-links a {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      font-size: 11px;
+      text-decoration: none;
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    .jump-links a:hover {
+      border-color: rgba(58, 90, 64, .35);
+      background: var(--sage-soft);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 16px 0 18px;
+      padding-top: 21px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -.015em;
+    }
+
+    .section-heading span {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      padding-bottom: 78px;
+    }
+
+    .video-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+    }
+
+    .media-frame {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      background: #e8e7e1;
+    }
+
+    .media-frame video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #e8e7e1;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .media-frame video:focus-visible {
+      outline: 2px solid var(--sage);
+      outline-offset: -3px;
+    }
+
+    .media-fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background: #eeeee9;
+      color: #686a62;
+      text-align: center;
+    }
+
+    .media-fallback.is-visible { display: flex; }
+
+    .media-fallback p {
+      max-width: 300px;
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .media-fallback strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .media-label {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.55);
+      border-radius: 999px;
+      background: rgba(247,247,245,.86);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 10px;
+      backdrop-filter: blur(10px);
+    }
+
+    .label-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--sage);
+    }
+
+    .card-content { padding: 20px 20px 16px; }
+
+    .card-kicker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 11px;
+    }
+
+    .index { color: var(--sage); }
+
+    .duration { color: var(--muted); }
+
+    .card-content h3 {
+      margin: 0;
+      font-size: 21px;
+      font-weight: 550;
+      letter-spacing: -.045em;
+    }
+
+    .description {
+      min-height: 44px;
+      margin: 8px 0 20px;
+      color: #70716b;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .control-panel {
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .seek-row {
+      display: grid;
+      grid-template-columns: 35px minmax(0, 1fr) 35px;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .time-readout {
+      color: #70716b;
+      font-size: 10px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 3px;
+      margin: 0;
+      border-radius: 99px;
+      appearance: none;
+      background: linear-gradient(to right, var(--sage) 0%, var(--sage) var(--progress, 0%), #e7e7e2 var(--progress, 0%), #e7e7e2 100%);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      width: 11px;
+      height: 11px;
+      border: 2px solid var(--card);
+      border-radius: 50%;
+      appearance: none;
+      background: var(--sage);
+      box-shadow: 0 0 0 1px var(--sage);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 8px;
+      height: 8px;
+      border: 2px solid var(--card);
+      border-radius: 50%;
+      background: var(--sage);
+      box-shadow: 0 0 0 1px var(--sage);
+    }
+
+    .control-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .left-actions { display: flex; align-items: center; gap: 9px; }
+
+    .play-button, .expand-button, .modal-close, .fullscreen-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      background: transparent;
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+
+    .play-button:hover, .expand-button:hover, .modal-close:hover, .fullscreen-button:hover {
+      border-color: rgba(58, 90, 64, .3);
+      background: var(--sage-soft);
+    }
+
+    .play-button:active, .expand-button:active { transform: scale(.98); }
+
+    .play-button {
+      width: 34px;
+      height: 34px;
+      border-color: var(--sage);
+      border-radius: 50%;
+      background: var(--sage);
+      color: #fff;
+      font-size: 12px;
+    }
+
+    .play-button:hover { background: #2f4c35; color: #fff; }
+
+    .status {
+      color: #777872;
+      font-size: 11px;
+    }
+
+    .expand-button, .fullscreen-button {
+      gap: 7px;
+      min-height: 34px;
+      padding: 0 11px;
+      border-radius: 999px;
+      font-size: 11px;
+    }
+
+    .expand-icon {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 19px 0 27px;
+      border-top: 1px solid var(--line);
+      color: #777872;
+      font-size: 11px;
+    }
+
+    .footer p { margin: 0; }
+    .footer .footer-mark { color: var(--sage); font-family: var(--mono); }
+
+    .lightbox {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      background: rgba(13, 15, 13, .78);
+      backdrop-filter: blur(14px);
+    }
+
+    .lightbox.is-open { display: flex; }
+
+    .lightbox-dialog {
+      width: min(1020px, 100%);
+      max-height: 100%;
+      overflow: auto;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      background: #171917;
+      color: #f7f7f5;
+      box-shadow: 0 24px 80px rgba(0,0,0,.24);
+    }
+
+    .lightbox-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 19px;
+    }
+
+    .lightbox-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .lightbox-heading span {
+      color: #a7b6a8;
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+
+    .lightbox-heading h2 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-color: rgba(255,255,255,.18);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .modal-close:hover { background: rgba(255,255,255,.1); }
+
+    .lightbox-media {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      background: #090a09;
+    }
+
+    .lightbox-media video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #090a09;
+      object-fit: contain;
+      cursor: pointer;
+    }
+
+    .lightbox-media .media-fallback {
+      background: #171917;
+      color: #b6b9b2;
+    }
+
+    .lightbox-media .media-fallback strong { color: #fff; }
+    .lightbox-media .play-button { background: #a7b6a8; border-color: #a7b6a8; color: #171917; }
+    .lightbox-media .play-button:hover { background: #c1d0c2; }
+    .lightbox-media .seek-row { grid-template-columns: 35px minmax(0, 1fr) 35px; }
+    .lightbox-media .time-readout, .lightbox-media .status { color: #aaa; }
+
+    .lightbox-controls {
+      padding: 15px 19px 17px;
+    }
+
+    .lightbox-controls .control-panel { padding-top: 0; border-top: 0; }
+    .lightbox-controls .control-panel input[type="range"] { background-color: #454845; }
+    .lightbox-controls .control-panel input[type="range"]::-webkit-slider-thumb { border-color: #171917; }
+    .lightbox-controls .control-panel input[type="range"]::-moz-range-thumb { border-color: #171917; }
+    .lightbox-controls .expand-button, .lightbox-controls .fullscreen-button { color: #f7f7f5; border-color: rgba(255,255,255,.18); }
+    .lightbox-controls .expand-button:hover, .lightbox-controls .fullscreen-button:hover { background: rgba(255,255,255,.1); }
+    .lightbox-controls .expand-button { display: none; }
+
+    :focus-visible { outline: 2px solid #86a48a; outline-offset: 3px; }
+
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 32px, 560px); }
+      .topbar { min-height: 64px; }
+      .intro { grid-template-columns: 1fr; gap: 24px; padding: 61px 0 34px; }
+      .intro-aside { max-width: 440px; }
+      .intro-aside p { margin-bottom: 17px; }
+      .video-grid { grid-template-columns: 1fr; gap: 14px; padding-bottom: 58px; }
+      .description { min-height: 0; }
+      .lightbox { padding: 14px; }
+      .lightbox-dialog { border-radius: 14px; }
+      .lightbox-top { padding: 13px 14px; }
+      .lightbox-controls { padding: 13px 14px 15px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell topbar">
+    <a class="wordmark" href="#" aria-label="Can Upcycle, kembali ke atas">
+      <span class="mark" aria-hidden="true">↗</span>
+      <span>Can Upcycle</span>
+    </a>
+    <span class="top-note">A small second life · 2026</span>
+  </header>
+
+  <main class="shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">DIY / Upcycle journal</p>
+        <h1 id="page-title">Tugas PKWU</h1>
+      </div>
+      <div class="intro-aside">
+        <p>Asbak anorganik ini dibuat dari kaleng bekas yang dipotong dan dilipat pada bagian sisinya menjadi pinggiran bermotif radial. Hasilnya adalah wadah abu rokok yang tahan panas, fungsional, dan membantu mengurangi limbah logam di lingkungan.</p>
+        <nav class="jump-links" aria-label="Navigasi video">
+          <a href="#video-01">Video 01 <span aria-hidden="true">↘</span></a>
+          <a href="#video-02">Video 02 <span aria-hidden="true">↘</span></a>
+        </nav>
+      </div>
+    </section>
+
+    <section aria-labelledby="showcase-title">
+      <div class="section-heading">
+        <h2 id="showcase-title">The making, then the living</h2>
+        <span>2 CHAPTERS &nbsp;·&nbsp; <span id="chapter-duration">02:08</span></span>
+      </div>
+
+      <div class="video-grid">
+        <article class="video-card" id="video-01">
+          <div class="media-frame">
+            <video class="project-video" preload="metadata" playsinline aria-label="Video proses pembuatan">
+              <source src="video_1.mp4" type="video/mp4">
+              Browser Anda tidak mendukung pemutaran video.
+            </video>
+            <div class="media-fallback" role="status">
+              <p><strong>Video belum tersedia</strong>Pastikan file video lokal ada di folder yang sama dengan halaman ini.</p>
+            </div>
+            <span class="media-label"><span class="label-dot"></span> PROSES PEMBUATAN</span>
+          </div>
+          <div class="card-content">
+            <div class="card-kicker">
+              <span class="index">01 / PROCESS</span>
+              <span class="duration">01:18</span>
+            </div>
+            <h3>Proses Pembuatan</h3>
+            <p class="description">Dari bahan yang ada menjadi sesuatu yang baru — langkah demi langkah, tanpa terburu-buru.</p>
+            <div class="control-panel" aria-label="Kontrol video proses">
+              <div class="seek-row">
+                <span class="time-readout current-time">00:00</span>
+                <input class="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Geser posisi video">
+                <span class="time-readout total-time">01:18</span>
+              </div>
+              <div class="control-actions">
+                <div class="left-actions">
+                  <button class="play-button" type="button" aria-label="Putar video" title="Putar video"><span aria-hidden="true">▶</span></button>
+                  <span class="status" aria-live="polite">Paused</span>
+                </div>
+                <button class="expand-button" type="button" aria-label="Perbesar video"><span class="expand-icon" aria-hidden="true">⤢</span> Perbesar</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="video-card" id="video-02">
+          <div class="media-frame">
+            <video class="project-video" preload="metadata" playsinline aria-label="Video promosi produk">
+              <source src="video_2.mp4" type="video/mp4">
+              Browser Anda tidak mendukung pemutaran video.
+            </video>
+            <div class="media-fallback" role="status">
+              <p><strong>Video belum tersedia</strong>Pastikan file video lokal ada di folder yang sama dengan halaman ini.</p>
+            </div>
+            <span class="media-label"><span class="label-dot"></span> HASIL</span>
+          </div>
+          <div class="card-content">
+            <div class="card-kicker">
+              <span class="index">02 / SHOWCASE</span>
+              <span class="duration">00:50</span>
+            </div>
+            <h3>Promosi Produk</h3>
+            <p class="description">Sebuah hasil sederhana kembali ke ruang terbuka — siap menemani hari-hari berikutnya.</p>
+            <div class="control-panel" aria-label="Kontrol video hasil">
+              <div class="seek-row">
+                <span class="time-readout current-time">00:00</span>
+                <input class="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Geser posisi video">
+                <span class="time-readout total-time">00:50</span>
+              </div>
+              <div class="control-actions">
+                <div class="left-actions">
+                  <button class="play-button" type="button" aria-label="Putar video" title="Putar video"><span aria-hidden="true">▶</span></button>
+                  <span class="status" aria-live="polite">Paused</span>
+                </div>
+                <button class="expand-button" type="button" aria-label="Perbesar video"><span class="expand-icon" aria-hidden="true">⤢</span> Perbesar</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <p>Ide kecil untuk memberi barang lama kehidupan baru.</p>
+    <span class="footer-mark">MAKE / REUSE / REPEAT</span>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+    <div class="lightbox-dialog">
+      <div class="lightbox-top">
+        <div class="lightbox-heading">
+          <span id="lightbox-index">01</span>
+          <h2 id="lightbox-title">Proses Pembuatan</h2>
+        </div>
+        <button class="modal-close" type="button" aria-label="Tutup video" title="Tutup (Esc)">×</button>
+      </div>
+      <div class="lightbox-media" id="lightbox-media"></div>
+      <div class="lightbox-controls" id="lightbox-controls"></div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const lightbox = document.querySelector("#lightbox");
+      const lightboxMedia = document.querySelector("#lightbox-media");
+      const lightboxControls = document.querySelector("#lightbox-controls");
+      const chapterDuration = document.querySelector("#chapter-duration");
+      const modalFallback = document.createElement("div");
+      modalFallback.className = "media-fallback";
+      modalFallback.setAttribute("role", "status");
+      modalFallback.innerHTML = "<p><strong>Video belum tersedia</strong>Pastikan file video lokal ada di folder yang sama dengan halaman ini.</p>";
+      lightboxMedia.append(modalFallback);
+      const closeButton = document.querySelector(".modal-close");
+      const title = document.querySelector("#lightbox-title");
+      const index = document.querySelector("#lightbox-index");
+      let activePlayer = null;
+      let returnFocus = null;
+
+      const formatTime = (seconds) => {
+        if (!Number.isFinite(seconds)) return "00:00";
+        const wholeSeconds = Math.floor(seconds);
+        return `${String(Math.floor(wholeSeconds / 60)).padStart(2, "0")}:${String(wholeSeconds % 60).padStart(2, "0")}`;
+      };
+
+      const updatePlayer = (player) => {
+        const { video, controls } = player;
+        const duration = Number.isFinite(video.duration) ? video.duration : player.expectedDuration;
+        player.durationLabel.textContent = formatTime(duration);
+        const progress = Number.isFinite(video.duration) && video.duration > 0
+          ? (video.currentTime / video.duration) * 100
+          : 0;
+        const durations = Array.from(document.querySelectorAll(".project-video"), (media) => media.duration);
+        if (durations.every(Number.isFinite)) {
+          chapterDuration.textContent = formatTime(durations.reduce((sum, item) => sum + item, 0));
+        }
+        controls.forEach((controlSet) => {
+          controlSet.current.textContent = formatTime(video.currentTime);
+          controlSet.total.textContent = formatTime(duration);
+          controlSet.seek.value = String(progress);
+          controlSet.seek.style.setProperty("--progress", `${progress}%`);
+          controlSet.play.setAttribute("aria-label", video.paused ? "Putar video" : "Jeda video");
+          controlSet.play.title = video.paused ? "Putar video" : "Jeda video";
+          controlSet.play.firstElementChild.textContent = video.paused ? "▶" : "Ⅱ";
+          controlSet.status.textContent = video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE
+            ? "Video tidak tersedia"
+            : (video.paused ? "Paused" : "Playing");
+        });
+      };
+
+      const playOrPause = (player) => {
+        if (player.video.paused) {
+          if (player.video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) {
+            player.fallback.classList.add("is-visible");
+            if (activePlayer === player) modalFallback.classList.add("is-visible");
+            player.controls.forEach((controlSet) => {
+              controlSet.status.textContent = "Video tidak tersedia";
+            });
+            return;
+          }
+          player.video.play().catch(() => {
+            player.fallback.classList.add("is-visible");
+            if (activePlayer === player) modalFallback.classList.add("is-visible");
+            player.controls.forEach((controlSet) => {
+              controlSet.status.textContent = "Tidak dapat memutar";
+            });
+          });
+        } else {
+          player.video.pause();
+        }
+      };
+
+      const makeControlSet = (container, player, isModal) => {
+        const panel = isModal ? document.createElement("div") : container;
+        if (isModal) {
+          panel.className = "control-panel";
+          panel.innerHTML = `
+          <div class="seek-row">
+            <span class="time-readout current-time">00:00</span>
+            <input class="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Geser posisi video">
+            <span class="time-readout total-time">00:00</span>
+          </div>
+          <div class="control-actions">
+            <div class="left-actions">
+              <button class="play-button" type="button" aria-label="Putar video" title="Putar video"><span aria-hidden="true">▶</span></button>
+              <span class="status" aria-live="polite">Paused</span>
+            </div>
+            <div class="left-actions">
+              ${isModal ? '<button class="fullscreen-button" type="button"><span aria-hidden="true">⛶</span> Layar penuh</button>' : ""}
+              <button class="expand-button" type="button"><span class="expand-icon" aria-hidden="true">⤢</span> Perbesar</button>
+            </div>
+          </div>`;
+          container.append(panel);
+        }
+        const controlSet = {
+          current: panel.querySelector(".current-time"),
+          total: panel.querySelector(".total-time"),
+          seek: panel.querySelector(".seek"),
+          play: panel.querySelector(".play-button"),
+          status: panel.querySelector(".status"),
+          expand: panel.querySelector(".expand-button"),
+          fullscreen: panel.querySelector(".fullscreen-button")
+        };
+        if (player) {
+          player.controls.push(controlSet);
+          controlSet.play.addEventListener("click", () => playOrPause(player));
+          controlSet.seek.addEventListener("input", () => {
+            if (Number.isFinite(player.video.duration)) {
+              player.video.currentTime = (Number(controlSet.seek.value) / 100) * player.video.duration;
+            }
+          });
+          controlSet.expand.addEventListener("click", () => openLightbox(player));
+          if (controlSet.fullscreen) {
+            controlSet.fullscreen.addEventListener("click", () => {
+              const fullscreenElement = document.fullscreenElement;
+              if (fullscreenElement) {
+                document.exitFullscreen();
+              } else if (lightbox.requestFullscreen) {
+                lightbox.requestFullscreen();
+              }
+            });
+          }
+        }
+        return controlSet;
+      };
+
+      const players = Array.from(document.querySelectorAll(".video-card")).map((card, playerIndex) => {
+        const video = card.querySelector("video");
+        const player = {
+          card,
+          video,
+          expectedDuration: playerIndex === 0 ? 78 : 50,
+          controls: [],
+          frame: card.querySelector(".media-frame"),
+          fallback: card.querySelector(".media-fallback"),
+          durationLabel: card.querySelector(".duration"),
+          name: card.querySelector("h3").textContent,
+          number: String(playerIndex + 1).padStart(2, "0"),
+          placeholder: null
+        };
+        makeControlSet(card.querySelector(".control-panel"), player, false);
+        video.addEventListener("timeupdate", () => updatePlayer(player));
+        video.addEventListener("loadedmetadata", () => updatePlayer(player));
+        video.addEventListener("durationchange", () => updatePlayer(player));
+        video.addEventListener("play", () => updatePlayer(player));
+        video.addEventListener("pause", () => updatePlayer(player));
+        video.addEventListener("ended", () => updatePlayer(player));
+        video.addEventListener("error", () => {
+          player.fallback.classList.add("is-visible");
+          if (activePlayer === player) modalFallback.classList.add("is-visible");
+          updatePlayer(player);
+        });
+        video.addEventListener("click", () => playOrPause(player));
+        updatePlayer(player);
+        return player;
+      });
+
+      makeControlSet(lightboxControls, null, true);
+
+      const modalControl = lightboxControls.querySelector(".control-panel");
+      const modalControls = {
+        current: modalControl.querySelector(".current-time"),
+        total: modalControl.querySelector(".total-time"),
+        seek: modalControl.querySelector(".seek"),
+        play: modalControl.querySelector(".play-button"),
+        status: modalControl.querySelector(".status"),
+        expand: modalControl.querySelector(".expand-button"),
+        fullscreen: modalControl.querySelector(".fullscreen-button")
+      };
+
+      const openLightbox = (player) => {
+        if (activePlayer) closeLightbox();
+        activePlayer = player;
+        returnFocus = document.activeElement;
+        player.placeholder = document.createComment("video location");
+        player.video.parentNode.insertBefore(player.placeholder, player.video);
+        lightboxMedia.append(player.video);
+        const videoUnavailable = Boolean(player.video.error)
+          || player.video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE;
+        player.fallback.classList.toggle("is-visible", videoUnavailable);
+        modalFallback.classList.toggle("is-visible", videoUnavailable);
+        player.controls.push(modalControls);
+        modalControls.play.onclick = () => playOrPause(player);
+        modalControls.seek.oninput = () => {
+          if (Number.isFinite(player.video.duration)) {
+            player.video.currentTime = (Number(modalControls.seek.value) / 100) * player.video.duration;
+          }
+        };
+        modalControls.fullscreen.onclick = () => {
+          if (document.fullscreenElement) document.exitFullscreen();
+          else if (lightbox.requestFullscreen) lightbox.requestFullscreen();
+        };
+        title.textContent = player.name;
+        index.textContent = player.number;
+        lightbox.classList.add("is-open");
+        document.body.style.overflow = "hidden";
+        updatePlayer(player);
+        closeButton.focus();
+      };
+
+      const closeLightbox = () => {
+        if (!activePlayer) return;
+        if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
+        activePlayer.placeholder.parentNode.insertBefore(activePlayer.video, activePlayer.placeholder);
+        activePlayer.placeholder.remove();
+        activePlayer.controls = activePlayer.controls.filter((controlSet) => controlSet !== modalControls);
+        lightbox.classList.remove("is-open");
+        document.body.style.overflow = "";
+        const previousFocus = returnFocus;
+        activePlayer = null;
+        if (previousFocus && previousFocus.isConnected) previousFocus.focus();
+      };
+
+      closeButton.addEventListener("click", closeLightbox);
+      lightbox.addEventListener("click", (event) => {
+        if (event.target === lightbox) closeLightbox();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+      });
+    })();
+  </script>
+</body>
+</html>
